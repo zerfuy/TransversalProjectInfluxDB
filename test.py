@@ -2,7 +2,7 @@
 """Tutorial on using the InfluxDB client."""
 
 import argparse
-
+from datetime import datetime
 from influxdb import InfluxDBClient
 
 
@@ -10,7 +10,7 @@ def main(host='localhost', port=8086):
     """Instantiate a connection to the InfluxDB."""
     user = ''
     password = ''
-    dbname = 'example'
+    dbname = 'historisation'
     dbuser = ''
     dbuser_password = 'my_secret_password'
     query = 'select Float_value from analysis_data;'
@@ -20,10 +20,9 @@ def main(host='localhost', port=8086):
         {
             "measurement": "analysis_data",
             "tags": {
-                "host": "server01",
-                "region": "FRANKFURT"
+                "type": "fire",
             },
-            "time": "2009-11-10T23:00:00Z",
+            "time": str(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')),
             "fields": {
                 "Float_value": 0.64,
                 "Int_value": 3,
@@ -47,15 +46,15 @@ def main(host='localhost', port=8086):
     print("Write points: {0}".format(json_body))
     client.write_points(json_body)
 
-    print("Querying data: " + query)
-    result = client.query(query)
+    # print("Querying data: " + query)
+    # result = client.query(query)
 
-    print("Result: {0}".format(result))
+    # print("Result: {0}".format(result))
 
-    print("Querying data: " + query_where)
-    result = client.query(query_where, bind_params=bind_params)
+    # print("Querying data: " + query_where)
+    # result = client.query(query_where, bind_params=bind_params)
 
-    print("Result: {0}".format(result))
+    # print("Result: {0}".format(result))
 
     # print("Switch user: " + user)
     # client.switch_user(user, password)
